@@ -17,6 +17,7 @@ or GPL2.txt for full copies of the license.
 	#define ASSERT(expr)
 #endif
 
+
 #if !defined(UDIG) && !defined(__USE_VMLINUX__)
 #include <linux/mman.h>
 #include <linux/futex.h>
@@ -25,6 +26,9 @@ or GPL2.txt for full copies of the license.
 #include <linux/eventpoll.h>
 #include <linux/prctl.h>
 #include "ppm.h"
+#ifdef __NR_io_memfd_create
+#include <uapi/linux/memfd.h>
+#endif
 #ifdef __NR_io_uring_register
 #include <uapi/linux/io_uring.h>
 #endif
@@ -1724,6 +1728,21 @@ static __always_inline u32 mlock2_flags_to_scap(unsigned long flags)
 	return res;
 }
 
+static __always_inline u32 memfd_create_flags_to_scap(u32 flags)
+{
+	u32 res = 0;
+#ifdef MFD_CLOEXEC
+		if(flags & MFD_CLOEXEC) res |= PPM_MFD_CLOEXEC;
+#endif
+#ifdef MFD_ALLOW_SEALING
+		if(flags & MFD_ALLOW_SEALING) res |= PPM_MFD_ALLOW_SEALING;
+#endif
+#ifdef MFD_HUGETLB
+		if(flags & MFD_HUGETLB) res |= PPM_MFD_HUGETLB;
+#endif
+return res;
+}
+
 static __always_inline u32 unlinkat_flags_to_scap(unsigned long flags)
 {
 	u32 res = 0;
@@ -2057,6 +2076,15 @@ static __always_inline uint32_t splice_flags_to_scap(uint32_t flags)
 		res |= PPM_SPLICE_F_GIFT;
 #endif
 	return res;
+}
+
+/*
+The flags argument is reserved for future use.  Currently, it must be specified as 0.
+See https://elixir.bootlin.com/linux/latest/source/kernel/pid.c#L709
+*/
+static __always_inline uint32_t pidfd_getfd_flags_to_scap(uint32_t flags)
+{
+	return 0;
 }
 
 #ifdef OVERLAYFS_SUPER_MAGIC

@@ -400,6 +400,12 @@ const struct syscall_evt_pair g_syscall_table[SYSCALL_TABLE_SIZE] = {
 #ifdef __NR_prctl
 	[__NR_prctl - SYSCALL_TABLE_ID0] = { UF_USED | UF_NEVER_DROP, PPME_SYSCALL_PRCTL_E, PPME_SYSCALL_PRCTL_X, PPM_SC_PRCTL },
 #endif
+#ifdef __NR_pidfd_getfd
+	[__NR_pidfd_getfd - SYSCALL_TABLE_ID0] = {UF_USED, PPME_SYSCALL_PIDFD_GETFD_E, PPME_SYSCALL_PIDFD_GETFD_X, PPM_SC_PIDFD_GETFD},
+#endif
+#ifdef __NR_memfd_create
+	[__NR_memfd_create - SYSCALL_TABLE_ID0] = {UF_USED, PPME_SYSCALL_MEMFD_CREATE_E, PPME_SYSCALL_MEMFD_CREATE_X, PPM_SC_MEMFD_CREATE},
+#endif
 	[__NR_restart_syscall - SYSCALL_TABLE_ID0] = { .ppm_sc = PPM_SC_RESTART_SYSCALL },
 	[__NR_exit - SYSCALL_TABLE_ID0] = {.ppm_sc = PPM_SC_EXIT},
 #ifdef __NR_time
@@ -686,9 +692,6 @@ const struct syscall_evt_pair g_syscall_table[SYSCALL_TABLE_SIZE] = {
 #ifdef __NR_mount_setattr
 	[__NR_mount_setattr - SYSCALL_TABLE_ID0] = {.ppm_sc = PPM_SC_MOUNT_SETATTR},
 #endif
-#ifdef __NR_memfd_create
-	[__NR_memfd_create - SYSCALL_TABLE_ID0] = {.ppm_sc = PPM_SC_MEMFD_CREATE},
-#endif
 #ifdef __NR_memfd_secret
 	[__NR_memfd_secret - SYSCALL_TABLE_ID0] = {.ppm_sc = PPM_SC_MEMFD_SECRET},
 #endif
@@ -697,9 +700,6 @@ const struct syscall_evt_pair g_syscall_table[SYSCALL_TABLE_SIZE] = {
 #endif
 #ifdef __NR_kexec_file_load
 	[__NR_kexec_file_load - SYSCALL_TABLE_ID0] = {.ppm_sc = PPM_SC_KEXEC_FILE_LOAD},
-#endif
-#ifdef __NR_pidfd_getfd
-	[__NR_pidfd_getfd - SYSCALL_TABLE_ID0] = {.ppm_sc = PPM_SC_PIDFD_GETFD},
 #endif
 #ifdef __NR_pidfd_open
 	[__NR_pidfd_open - SYSCALL_TABLE_ID0] = {.ppm_sc = PPM_SC_PIDFD_OPEN},
